@@ -10,8 +10,8 @@ echo "SPL Starter Pack Installer (External)"
 echo "======================================"
 echo ""
 
-# Get password
-PASSWORD="${STARTER_PWD:-}"
+# Get password from: 1) argument, 2) env var, 3) prompt
+PASSWORD="${1:-${STARTER_PWD:-}}"
 if [ -z "$PASSWORD" ]; then
   if [ -t 0 ]; then
     # Running interactively
@@ -22,8 +22,10 @@ if [ -z "$PASSWORD" ]; then
     read -sp "Enter access password: " PASSWORD < /dev/tty
     echo "" > /dev/tty
   else
-    echo "Error: No password provided. Set STARTER_PWD environment variable:"
-    echo "  STARTER_PWD=<password> curl -fsSL ... | bash"
+    echo "Error: No password provided."
+    echo ""
+    echo "Usage:"
+    echo "  curl -fsSL .../install.sh | bash -s -- <password>"
     exit 1
   fi
 fi
