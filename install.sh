@@ -11,9 +11,10 @@ echo "======================================"
 echo ""
 
 # Get password
-PASSWORD="${SPL_PASSWORD:-}"
+PASSWORD="${STARTER_PWD:-}"
 if [ -z "$PASSWORD" ]; then
-  read -sp "Enter access password: " PASSWORD
+  # Read from /dev/tty since stdin is consumed by curl when piped
+  read -sp "Enter access password: " PASSWORD < /dev/tty
   echo ""
 fi
 
