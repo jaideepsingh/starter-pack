@@ -45,7 +45,11 @@ fi
 
 # Extract with password
 echo "Extracting..."
-if ! unzip -q -P "$PASSWORD" "$TEMP_ZIP" -d "$INSTALL_DIR" 2>/dev/null; then
+if [ -d "$INSTALL_DIR/spl-starter-pack" ]; then
+  echo "Removing existing installation..."
+  rm -rf "$INSTALL_DIR/spl-starter-pack"
+fi
+if ! unzip -q -P "$PASSWORD" "$TEMP_ZIP" -d "$INSTALL_DIR"; then
   rm -f "$TEMP_ZIP"
   echo ""
   echo "Error: Invalid password or corrupted archive"
