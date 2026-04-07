@@ -13,9 +13,19 @@ echo ""
 # Get password
 PASSWORD="${STARTER_PWD:-}"
 if [ -z "$PASSWORD" ]; then
-  # Read from /dev/tty since stdin is consumed by curl when piped
-  read -sp "Enter access password: " PASSWORD < /dev/tty
-  echo ""
+  if [ -t 0 ]; then
+    # Running interactively
+    read -sp "Enter access password: " PASSWORD
+    echo ""
+  elif [ -e /dev/tty ]; then
+    # Piped but tty available
+    read -sp "Enter access password: " PASSWORD < /dev/tty
+    echo "" > /dev/tty
+  else
+    echo "Error: No password provided. Set STARTER_PWD environment variable:"
+    echo "  STARTER_PWD=<password> curl -fsSL ... | bash"
+    exit 1
+  fi
 fi
 
 if [ -z "$PASSWORD" ]; then
